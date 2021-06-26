@@ -1,0 +1,23 @@
+{
+  "name": "secrets---starting-code",
+  "version": "1.0.0",
+  "description": "Authentication and security intro",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elicitmind/Authentication-and-Security.git"
+  },
+  "author": "Dawid Zd",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elicitmind/Authentication-and-Security/issues"
+  },
+  "homepage": "https://github.com/elicitmind/Authentication-and-Security#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1"
+  }
+}
