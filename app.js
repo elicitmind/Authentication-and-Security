@@ -2,6 +2,7 @@ const express = require("express")
 const ejs = require("ejs")
 const app = express()
 const mongoose = require("mongoose")
+const encrypt = require("mongoose-encryption")
 
 app.set("view engine", "ejs")
 app.use(express.static("public"))
@@ -14,10 +15,17 @@ mongoose.connect("mongodb://localhost:27017/userDB", {
     useUnifiedTopology: true
 })
 
-const userSchema = {
+const userSchema = new mongoose.Schema({
     email: String,
     password: String
-}
+})
+//I CAN USE dotEnv and pass this string into an .env file and use it as process.env.myEncryptingString
+const secret = "thisismystringtoencryptpasswords"
+//IMPORTANT TO CREATE IT BEFORE USER NEW MODEL, AS WE PASSING userSchema TO IT, WE WANT IT WITH PLUGIN!
+userSchema.plugin(encrypt, {
+    secret: secret,
+    encryptedFields: ["password"]
+});
 
 const User = new mongoose.model("User", userSchema)
 
@@ -67,8 +75,10 @@ app.post("/login", (req, res) => {
             if (results) {
                 if (results.password === passwordLogin) {
                     res.render("secrets")
-                }}
-        }})
+                }
+            }
+        }
+    })
 })
 
 
