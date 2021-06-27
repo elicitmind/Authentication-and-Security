@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require("express")
 const ejs = require("ejs")
 const app = express()
@@ -19,11 +20,13 @@ const userSchema = new mongoose.Schema({
     email: String,
     password: String
 })
-//I CAN USE dotEnv and pass this string into an .env file and use it as process.env.myEncryptingString
-const secret = "thisismystringtoencryptpasswords"
+
+console.log(process.env.BOLO)
+//I CAN USE dotEnv and pass this string into an .env file and use it
+const secret = process.env.SECRET_STRING
 //IMPORTANT TO CREATE IT BEFORE USER NEW MODEL, AS WE PASSING userSchema TO IT, WE WANT IT WITH PLUGIN!
 userSchema.plugin(encrypt, {
-    secret: secret,
+    secret: process.env.SECRET_STRING,
     encryptedFields: ["password"]
 });
 
