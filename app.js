@@ -3,7 +3,7 @@ const express = require("express")
 const ejs = require("ejs")
 const app = express()
 const mongoose = require("mongoose")
-const encrypt = require("mongoose-encryption")
+const md5 = require("md5")
 
 app.set("view engine", "ejs")
 app.use(express.static("public"))
@@ -21,17 +21,7 @@ const userSchema = new mongoose.Schema({
     password: String
 })
 
-console.log(process.env.BOLO)
-//I CAN USE dotEnv and pass this string into an .env file and use it
-const secret = process.env.SECRET_STRING
-//IMPORTANT TO CREATE IT BEFORE USER NEW MODEL, AS WE PASSING userSchema TO IT, WE WANT IT WITH PLUGIN!
-userSchema.plugin(encrypt, {
-    secret: process.env.SECRET_STRING,
-    encryptedFields: ["password"]
-});
-
 const User = new mongoose.model("User", userSchema)
-
 
 
 
@@ -53,7 +43,7 @@ app.post("/register", (req, res) => {
 
     const newUser = new User({
         email: req.body.username,
-        password: req.body.password
+        password: md5(req.body.password)
     })
     newUser.save((err) => {
         if (err) {
@@ -66,7 +56,7 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
     const usernameLogin = req.body.username
-    const passwordLogin = req.body.password
+    const passwordLogin = md5(req.body.password)
     console.log(req.body)
 
     User.findOne({
