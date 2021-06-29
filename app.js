@@ -68,6 +68,11 @@ app.get("/register", (req, res) => {
 res.render("register")
 })
 
+app.get("/logout", (req, res) => {
+    req.logout()
+    res.redirect('/')
+})
+
 
 app.post("/register", (req, res) => {
     console.log(req.body)
@@ -78,8 +83,7 @@ app.post("/register", (req, res) => {
             console.log(err)
             res.redirect("/register")
         } else {
-            ///////////DZIWNA SKLADNIA
-            passport.authenticate('local')(req, res, function () {
+            passport.authenticate('local')(req, res, () => {
                 res.redirect('/secrets');
             })
         }
@@ -87,7 +91,22 @@ app.post("/register", (req, res) => {
 })
 
 app.post("/login", (req, res) => {
-
+//new user
+    const user = new User({
+        username: req.body.username,
+        password: req.body.password
+    })
+//method from passport
+    req.login(user, (err) => {
+        if (err) {
+            console.log(err)
+        } else {
+            passport.authenticate("local")(req, res, ()=>{
+                res.redirect('/secrets')
+            })
+        }
+    }
+    )
 })
 
 
