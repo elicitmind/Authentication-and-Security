@@ -19,7 +19,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: true
+        secure: false
     }
 }))
 
@@ -53,7 +53,7 @@ app.get("/", (req, res) => {
 })
 
 app.get("/secrets", (req, res) => {
-    if (req.isAuthenticated()) {
+    if  (req.isAuthenticated()) {
         res.render("secrets")
     } else {
         res.redirect("/login")
@@ -73,13 +73,14 @@ app.post("/register", (req, res) => {
     console.log(req.body)
     User.register({
         username: req.body.username
-    }, req.body.password, (err, user) => {
+    }, req.body.password, (err, account) => {
         if(err) {
             console.log(err)
             res.redirect("/register")
         } else {
-            passport.authenticate("local", { failureRedirect: '/login' })(req, res, () => {
-                res.redirect("/secrets")
+            ///////////DZIWNA SKLADNIA
+            passport.authenticate('local')(req, res, function () {
+                res.redirect('/secrets');
             })
         }
     })
